@@ -27,15 +27,12 @@ for root, dirs, files in os.walk(base_playlist_folder):
                     
                     # Construct the full path to the track using the base music source
                     full_track_path = os.path.join(base_music_source, track_path)
-                    print("full_track_paths")
-                    print(full_track_path)
 
                     # Construct the new music path using the new music folder
-                    new_music_path = os.path.join(new_music_folder, track_path)  # Use track_path directly
-                    print("new_music_path")
-                    print(new_music_path)
+                    new_music_path = os.path.join(new_music_folder, track_path)
 
                     os.remove(new_music_path)  # Remove existing hard link if present
+
                     # Create new paths if they don't exist
                     os.makedirs(os.path.dirname(new_music_path), exist_ok=True)
 
@@ -43,6 +40,3 @@ for root, dirs, files in os.walk(base_playlist_folder):
                     os.link(full_track_path, new_music_path)
 
 print("Playlists copied and tracks hard linked successfully.")
-
-
-# currently the hard links are not working fix it sometimes
