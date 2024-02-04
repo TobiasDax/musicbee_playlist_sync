@@ -43,11 +43,11 @@ for root, dirs, files in os.walk(base_playlist_folder):
 
                     # Create new paths if they don't exist
                     os.makedirs(os.path.dirname(new_music_path), exist_ok=True)
-                    print("Created Folder:" new_music_path)
+                    print(f"Created Folder: {new_music_path}")
 
 
                     # Create new hard link after potential removal
                     os.link(full_track_path, new_music_path)
-                    print("Created Hardlink:" full_track_path)
+                    print(f"Created Hardlink: {full_track_path}")
 
 print("Playlists copied and tracks hard linked successfully.")
