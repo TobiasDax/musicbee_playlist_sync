@@ -8,12 +8,13 @@ new_music_folder = os.environ.get('NEW_MUSIC_FOLDER', '/mnt/media/MusicBee/Music
 base_music_source = os.environ.get('BASE_MUSIC_SOURCE', '/mnt/media/Music/')
 
 # Remove all contents within the folder
-shutil.rmtree(new_music_folder)
+music_subfolder = os.path.join(new_music_folder, 'Music')
+shutil.rmtree(music_subfolder)
 print("Deleted Sync Folder and old Links.")
 
 # Recreate an empty folder
-os.mkdir(new_music_folder)
-print("Recreated Sync Folder.")
+# os.mkdir(music_subfolder)
+# print("Recreated Sync Folder.")
 
 # Iterate through all playlists in the base folder and its subfolders
 for root, dirs, files in os.walk(base_playlist_folder):
