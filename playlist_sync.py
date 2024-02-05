@@ -21,7 +21,7 @@ for root, dirs, files in os.walk(base_playlist_folder):
         if file.endswith('.m3u'):
             # Construct paths for the current playlist
             base_playlist_path = os.path.join(root, file)
-            new_playlist_path = os.path.join(new_playlist_folder, file)
+            new_playlist_path = os.path.join(new_playlist_folder, os.path.relpath(base_playlist_path, base_playlist_folder))
             print("Constructed Playlist Path")
 
             # Copy the playlist file with metadata preservation
@@ -34,20 +34,25 @@ for root, dirs, files in os.walk(base_playlist_folder):
                 for line in base_playlist_file:
                     # Strip leading and trailing whitespaces, and relative folder paths
                     track_path = line.strip("./").strip()
-                    
+
+                    # Normalize the track path to handle case sensitivity
+                    track_path = os.path.normcase(os.path.normpath(track_path))
+
                     # Construct the full path to the track using the base music source
                     full_track_path = os.path.join(base_music_source, track_path)
 
                     # Construct the new music path using the new music folder
-                    new_music_path = os.path.join(new_music_folder, track_path)
+                    new_music_path = os.path.join(new_music_folder, os.path.relpath(full_track_path, base_music_source))
 
                     # Create new paths if they don't exist
                     os.makedirs(os.path.dirname(new_music_path), exist_ok=True)
                     print(f"Created Folder: {new_music_path}")
 
-
-                    # Create new hard link after potential removal
-                    os.link(full_track_path, new_music_path)
-                    print(f"Created Hardlink: {full_track_path}")
+                    try:
+                        os.link(full_track_path, new_music_path)
+                        print(f"Created Hardlink: {full_track_path}")
+                    except Exception as e:
+                        print(f"Error creating hardlink for {full_track_path}: {e}")
+                        # Optionally, you can log the error or take other actions here
 
 print("Playlists copied and tracks hard linked successfully.")
